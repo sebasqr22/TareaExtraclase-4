@@ -52,5 +52,47 @@ int entrada(contenido *contexto, const uint8_t *listaMsg, unsigned largo){
     }
     while(largo-- & !contexto->corrupto){
         contexto->bloque[contexto->indiceBloque++] = (*listaMsg & 0xFF);
+        contexto->largoBajo += 8;
+        if(contexto->largoBajo == 0){
+            contexto->largoAlto++;
+            if(contexto->largoAlto == 0){
+                contexto->corrupto = 1;
+            }
+        }
+        if(contexto->indiceBloque == 64){
+            Procesamiento(contexto);
+        }
+        listaMsg++;
+    }
+    return completado;
+}
+void Procesamiento(contenido *contexto){
+    const uint32_t lista[] = {
+        0x5A827999,
+        0x6ED9EBA1,
+        0x8F1BBCDC,
+        0xCA62C1D6
+    };
+    int contador;
+    uint32_t tmp;
+    uint32_t Palabra[80];
+    uint32_t A, B, C, D, E;
+
+    for(contador = 0; contador < 80; contador ++){
+        Palabra[contador] = ShiftCircular(1, Palabra[contador-3] ^ Palabra[contador-8] ^ Palabra[contador-14] ^ Palabra[contador-16]);
+    }
+    A = contexto->intermedio[0];
+    B = contexto->intermedio[1]; 
+    C = contexto->intermedio[2];
+    D = contexto->intermedio[3];
+    E = contexto->intermedio[4];
+
+    for(contador = 0; contador < 20; contador ++){
+        tmp = ShiftCircular(5, A) + ((B & C) | ((~B) & D)) +_ E + Palabra[contador] + lista[0];
+        E = D;
+        D = C;
+        C = ShiftCircular(30, B);
+        B = A;
+        A = tmp;
     }
 }
