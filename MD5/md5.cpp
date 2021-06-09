@@ -1,3 +1,4 @@
+#pragma once
 #include "md5.h"
 #include <cstdio>
  

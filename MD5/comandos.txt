@@ -1,0 +1,5 @@
+g++ receptor.cpp md5.cpp -o receptor -lsfml-network
+g++ transmisor.cpp md5.cpp -o transmisor -lsfml-network -lsfml-system
+
+./receptor
+./transmisor
