@@ -11,11 +11,11 @@ int reset(contenido *contexto){
     contexto->largoBajo =0;
     contexto->largoAlto = 0;
     contexto->indiceBloque = 0;
-    contexto->intermedio[0] = 0x67452301;
-    contexto->intermedio[1] = 0xEFCDAB89;
-    contexto->intermedio[2] = 0x98BADCFE;
-    contexto->intermedio[3] = 0x10325476;
-    contexto->intermedio[4] = 0xC3D2E1F0;
+    contexto->intermedio[0] = 0x67438638;
+    contexto->intermedio[1] = 0xEF54AB89;
+    contexto->intermedio[2] = 0x9824FE34;
+    contexto->intermedio[3] = 0xB032E676;
+    contexto->intermedio[4] = 0xC3C671FA;
     contexto->terminado = 0;
     contexto->corrupto = 0;
     return completado;
