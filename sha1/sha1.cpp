@@ -95,4 +95,61 @@ void Procesamiento(contenido *contexto){
         B = A;
         A = tmp;
     }
+    for(contador = 20; contador < 40; contador ++){
+        tmp = ShiftCircular(5,A) +  (B ^ C ^ C) + E + Palabra[contador] + lista[i];
+        E = D;
+        D = C;
+        C = ShiftCircular(30, B);
+        B = A;
+        A = tmp;
+    }
+    for(contador = 40; contador < 60; contador ++){
+        tmp = ShiftCircular(5, A) + ((B & C) | (B & D) | (C & D)) + E + Palabra[contador] + lista[2];
+        E = D;
+        D = C;
+        C = ShiftCircular(30, B);
+        B = A;
+        A = tmp;
+    }
+    for(contador = 60; contador < 80; contador ++){
+        tmp = ShiftCircular(5, A) + (B ^ C ^ D) + E + Palabra[contador] + lista[3];
+        E = D;
+        D = C;
+        C = ShiftCircular(30, B);
+        B = A;
+        A = tmp;
+    }
+    contexto->intermedio[0] += A;
+    contexto->intermedio[1] += B;
+    contexto->intermedio[2] += C;
+    contexto->intermedio[3] += D;
+    contexto->intermedio[4] += E;
+    contexto->indiceBloque = 0;
+}
+void Mensaje(contenido *contexto){
+    if(contexto->indiceBloque > 55){
+        contexto->bloque[contexto->indiceBloque++] = 0x80;
+        while(contexto->indiceBloque < 64){
+            contexto->bloque[contexto->indiceBloque++] = 0;
+        }
+        Procesamiento(contexto);
+        while(contexto->indiceBloque < 56){
+            contexto->bloque[contexto->indiceBloque++] = 0;
+        }
+    }
+    else{
+        contexto->bloque[contexto->indiceBloque++] = 0x80;
+        while(contexto->indiceBloque < 56){
+            contexto->bloque[contexto->indiceBloque++] = 0;
+        }
+    }
+    contexto->bloque[56] = contexto->largoAlto >> 24;
+    contexto->bloque[57] = contexto->largoAlto >> 16;
+    contexto->bloque[58] = contexto->largoAlto >> 8;
+    contexto->bloque[59] = contexto->largoAlto;
+    contexto->bloque[60] = contexto->largoBajo >> 24;
+    contexto->bloque[61] = contexto->largoBajo >> 16;
+    contexto->bloque[62] = contexto->largoBajo >> 8;
+    contexto->bloque[63] = contexto->largoBajo;
+    Procesamiento(contexto);
 }
